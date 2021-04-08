@@ -2,15 +2,18 @@
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import pandas as pd
-import yfinance as yf
-from datetime import date, timedelta, datetime
+from yfinance import Ticker
+import numpy as np
+
 
 # Main function
-
-
 def main():
     # Read in CSV of just date and tweets into a data frame
     df = pd.read_csv('elonmusk.csv')
+
+    # Convert String dates into datetime data type
+    df['date'] = pd.to_datetime(df.date)
+    print(df.info())
 
     # Download lexicon to use for sentiment analysis
     nltk.download('vader_lexicon')
@@ -33,28 +36,29 @@ def main():
 
     # Stock price code starts here
 
-
     # Create TSLA ticker object
-    tkr = yf.Ticker('TSLA')
+    tkr = Ticker('TSLA')
 
     # Get 10y TSLA history
     hist = tkr.history(period="10y")
 
-    #isolate date and closing price
+    # isolate date and closing price
     df_fi = hist.iloc[:, 3]
-    
-    print(df_fi.head())
 
-    #convert the date format of the dataset to match the closing price history dataset
-    df['date'] = df['date'].apply(lambda date: datetime.strftime(datetime.strptime(date,'%m/%d/%Y'),'%Y-%m-%d'))
-    
-    print(df_fi.head())
-    print(df_fi["Date"])
+    # Read data from CSV created from df_fi dataframe previously
+    stock = pd.read_csv('stockdata.csv')
 
-    #convert Date column to 
-    df_fi["Date"] =  df_fi["Date"].apply(lambda Date: Date)
+    # # Convert String dates into datetime data type
+    stock['date'] = pd.to_datetime(stock.date)
 
-    closing_dict = df_fi.to_dict()
+    # Merge the tweet, sentiment, and stock data into one dataframe by date
+    merged = pd.merge(df, stock, how='outer', on='date')
+
+    # Replace holiday/weekend dates with stock value from last trading day
+    merged['Close'] = merged['Close'].replace('', np.nan).ffill()
+
+    # Create CSV of this data
+    merged.to_csv('final_data.csv')
 
 
 if __name__ == '__main__':
