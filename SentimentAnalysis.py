@@ -55,7 +55,7 @@ def main():
     merged = pd.merge(df, stock, how='outer', on='date')
 
     # Replace holiday/weekend dates with stock value from last trading day
-    merged['Close'] = merged['Close'].replace('', np.nan).ffill()
+    merged['Close'] = merged['Close'].replace('', np.nan).bfill()
 
     # Create CSV of this data
     merged.to_csv('final_data.csv')
