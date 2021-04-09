@@ -49,10 +49,11 @@ def main():
     # Print out model slope/coefficient
     print("Model slope: ", model.coef_, "\n")
 
+    # Plot linear regression model
     axes = plt.gca()
-    x_vals = np.array(axes.get_xlim())
-    y_vals = model.intercept_ + model.coef_ * x_vals
-    plt.plot(x_vals, y_vals, '--')
+    x_val = np.array(axes.get_xlim())
+    y_val = model.intercept_ + model.coef_ * x_val
+    plt.plot(x_val, y_val, '--')
     plt.title("Linear Regression Model")
     plt.xlabel("Sentiment")
     plt.ylabel("Closing price")
