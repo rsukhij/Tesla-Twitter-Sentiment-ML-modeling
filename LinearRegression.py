@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 
 # Main function
@@ -17,6 +18,16 @@ def main():
     # Y data
     close_price_column = df.loc[:, 'Close']
     close_price = close_price_column.values
+
+    x_data = np.array(sentiment)
+    y_data = np.array(close_price)
+
+    # Plot data
+    plt.scatter(x_data, y_data, alpha=0.5)
+    plt.title("Sentiment vs Closing price")
+    plt.xlabel("Sentiment")
+    plt.ylabel("Closing price")
+    plt.show()
 
     # Convert the data into numpy arrays
     x = np.array(sentiment).reshape((-1, 1))
@@ -37,6 +48,15 @@ def main():
 
     # Print out model slope/coefficient
     print("Model slope: ", model.coef_, "\n")
+
+    axes = plt.gca()
+    x_vals = np.array(axes.get_xlim())
+    y_vals = model.intercept_ + model.coef_ * x_vals
+    plt.plot(x_vals, y_vals, '--')
+    plt.title("Linear Regression Model")
+    plt.xlabel("Sentiment")
+    plt.ylabel("Closing price")
+    plt.show()
 
 
 if __name__ == '__main__':
