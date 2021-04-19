@@ -4,7 +4,9 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import pandas as pd
 from yfinance import Ticker
 import numpy as np
-
+import datetime
+from pandas.tseries.holiday import USFederalHolidayCalendar
+from pandas.tseries.offsets import CustomBusinessDay
 
 # Main function
 def main():
@@ -57,8 +59,15 @@ def main():
     # Replace holiday/weekend dates with stock value from last trading day
     merged['Close'] = merged['Close'].replace('', np.nan).bfill()
 
+    # Read data from CSV with prices after 1 week
+    weekAfterTweet = pd.read_csv('final_with_priceAfter7days.csv')
+
+    #Create new attribute for percentage change after one week
+    weekAfterTweet['Percent change 1 week'] = (weekAfterTweet['priceafter7days'] / weekAfterTweet['Close'].shift(1) - 1).fillna(0)
+
     # Create CSV of this data
-    merged.to_csv('final_data.csv')
+    weekAfterTweet.to_csv('final_data_withPercentChange.csv')
+
 
 
 if __name__ == '__main__':
