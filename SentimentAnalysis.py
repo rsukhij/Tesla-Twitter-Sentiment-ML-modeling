@@ -8,6 +8,7 @@ import datetime
 from pandas.tseries.holiday import USFederalHolidayCalendar
 from pandas.tseries.offsets import CustomBusinessDay
 
+
 # Main function
 def main():
     # Read in CSV of just date and tweets into a data frame
@@ -62,12 +63,12 @@ def main():
     # Read data from CSV with prices after 1 week
     weekAfterTweet = pd.read_csv('final_with_priceAfter7days.csv')
 
-    #Create new attribute for percentage change after one week
-    weekAfterTweet['Percent change 1 week'] = (weekAfterTweet['priceafter7days'] / weekAfterTweet['Close'].shift(1) - 1).fillna(0)
+    # Create new attribute for percentage change after one week
+    weekAfterTweet['Percent change 1 week'] = (
+                weekAfterTweet['priceafter7days'] / weekAfterTweet['Close'].shift(1) - 1).fillna(0)
 
     # Create CSV of this data
     weekAfterTweet.to_csv('final_data_withPercentChange.csv')
-
 
 
 if __name__ == '__main__':
