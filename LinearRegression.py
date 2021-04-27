@@ -9,25 +9,15 @@ import matplotlib.pyplot as plt
 # Main function
 def main():
     # Get dataframe from cleaned CSV of data
-    df = pd.read_csv('cleaned_data.csv')
+    df = pd.read_csv('total_engagement_filtered.csv')
 
     # X data
     sentiment_column = df.loc[:, 'compound']
     sentiment = sentiment_column.values
 
     # Y data
-    close_price_column = df.loc[:, 'Close']
+    close_price_column = df.loc[:, 'Percent change 1 week']
     close_price = close_price_column.values
-
-    x_data = np.array(sentiment)
-    y_data = np.array(close_price)
-
-    # Plot data
-    plt.scatter(x_data, y_data, alpha=0.5)
-    plt.title("Sentiment vs Closing price")
-    plt.xlabel("Sentiment")
-    plt.ylabel("Closing price")
-    plt.show()
 
     # Convert the data into numpy arrays
     x = np.array(sentiment).reshape((-1, 1))
