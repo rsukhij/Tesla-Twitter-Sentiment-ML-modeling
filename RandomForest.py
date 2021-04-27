@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 from sklearn import metrics
 from sklearn.metrics import r2_score
 
@@ -21,14 +21,20 @@ y = np.array(percent_change)
 # Split data intro training and test arrays 80/20 split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-# Create the Decision Tree Regressor using mean squared error as the splitting criteria and a max depth of 5
-regressor = DecisionTreeRegressor(criterion='mse', max_depth=10)
+# Double check data formatting
+# print(X_train.shape)
+# print(y_train.shape)
+# print(X_test.shape)
+# print(y_test.shape)
 
-# Creating the model and fitting it on the training data
-model = regressor.fit(X_train, y_train)
+# Create the Random Forest Regressor with 1000 decision trees
+regressor = RandomForestRegressor(n_estimators=1000, random_state=42)
 
-# Predicted values from the model on the test data
-y_pred = model.predict(X_test)
+# Fit the model using the training data
+regressor.fit(X_train, y_train)
+
+# Make predictions using the test data
+y_pred = regressor.predict(X_test)
 
 # Performance metrics
 print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
