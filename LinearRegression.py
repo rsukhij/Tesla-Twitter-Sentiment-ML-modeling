@@ -6,19 +6,20 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import datetime as dt
 
+
 # Main function
 def main():
     # Get dataframe from cleaned CSV of data
     df = pd.read_csv('total_engagement_filtered.csv')
     df['Date'] = pd.to_datetime(df.date)
     df['date'] = pd.to_datetime(df.date)
-    df['date']= df['date'].map(dt.datetime.toordinal)
+    df['date'] = df['date'].map(dt.datetime.toordinal)
     # X data
-    sentiment_column = df.loc[:, 'date']
+    sentiment_column = df.loc[:, 'compound']
     sentiment = sentiment_column.values
 
     # Y data
-    close_price_column = df.loc[:, 'compound']
+    close_price_column = df.loc[:, 'Percent change 1 week']
     close_price = close_price_column.values
 
     # Convert the data into numpy arrays
@@ -27,7 +28,7 @@ def main():
 
     # Split data intro training and test arrays 80/20 split
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
-    plt.scatter(df['date'],df['compound'])
+
     # Create the Linear Regression Model and fit it on the training data
     model = LinearRegression().fit(X_train, y_train)
     # Test it on the training data and get R^2 value to see goodness of fit
@@ -41,13 +42,15 @@ def main():
     print("Model slope: ", model.coef_, "\n")
 
     # Plot linear regression model
+    plt.scatter(df['compound'], df['Percent change 1 week'])
+
     axes = plt.gca()
     x_val = np.array(axes.get_xlim())
     y_val = model.intercept_ + model.coef_ * x_val
     plt.plot(x_val, y_val, '--')
     plt.title("Linear Regression Model")
-    plt.xlabel("Ordinal Date since 2015")
-    plt.ylabel("Sentiment")
+    plt.xlabel("Sentiment")
+    plt.ylabel("Percent change in price by week")
     plt.show()
 
 
