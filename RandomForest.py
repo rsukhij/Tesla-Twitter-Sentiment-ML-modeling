@@ -4,6 +4,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn import metrics
 from sklearn.metrics import r2_score
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+import seaborn as sn
 
 # Get dataframe from cleaned CSV of data
 df = pd.read_csv('total_engagement_filtered.csv')
@@ -41,3 +44,43 @@ print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
 print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
 print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
 print('R Squared Score is:', r2_score(y_test, y_pred))
+
+# Plotting results
+plt.scatter(X_test, y_test)
+plt.scatter(X_test, y_pred, color='red')
+plt.xlim([-1, 1])
+plt.title("Random Forest Model")
+plt.xlabel("Sentiment")
+plt.ylabel("Percent change in price by week")
+plt.show()
+
+# Confusion matrix
+actual = [None] * len(y_test)
+predicted = [None] * len(y_pred)
+i = 0
+
+for element in y_test:
+    if element > 0:
+        actual[i] = 1
+    elif element == 0:
+        actual[i] = 0
+    elif element < 0:
+        actual[i] = -1
+    i += 1
+
+i = 0
+for element in y_pred:
+    if element > 0:
+        predicted[i] = 1
+    elif element == 0:
+        predicted[i] = 0
+    elif element < 0:
+        predicted[i] = -1
+    i += 1
+
+cm = confusion_matrix(actual, predicted)
+
+df_cm = pd.DataFrame(cm, range(2), range(2))
+sn.set(font_scale=1.5)
+sn.heatmap(df_cm, annot=True, annot_kws={"size": 20})
+plt.show()

@@ -5,6 +5,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import datetime as dt
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix
+import seaborn as sn
 
 
 # Main function
@@ -31,9 +34,18 @@ def main():
 
     # Create the Linear Regression Model and fit it on the training data
     model = LinearRegression().fit(X_train, y_train)
+
     # Test it on the training data and get R^2 value to see goodness of fit
     r_sq = model.score(X_test, y_test)
-    print("R squared value: ", r_sq, "\n")
+
+    # Get predicted values
+    y_pred = model.predict(X_test)
+
+    # Performance metrics
+    print("R squared value: ", r_sq)
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
 
     # Print out model intercept
     print("Model intercept: ", model.intercept_, "\n")
@@ -42,15 +54,49 @@ def main():
     print("Model slope: ", model.coef_, "\n")
 
     # Plot linear regression model
-    plt.scatter(df['compound'], df['Percent change 1 week'])
+    # plt.scatter(df['compound'], df['Percent change 1 week'])
 
-    axes = plt.gca()
-    x_val = np.array(axes.get_xlim())
-    y_val = model.intercept_ + model.coef_ * x_val
-    plt.plot(x_val, y_val, '--')
+    # axes = plt.gca()
+    # x_val = np.array(axes.get_xlim())
+    # y_val = model.intercept_ + model.coef_ * x_val
+    # plt.plot(x_val, y_val, '--', color='red')
+    plt.scatter(X_test, y_test)
+    plt.scatter(X_test, y_pred, color='red')
+    plt.xlim([-1, 1])
     plt.title("Linear Regression Model")
     plt.xlabel("Sentiment")
     plt.ylabel("Percent change in price by week")
+    plt.show()
+
+    # Confusion matrix
+    actual = [None] * len(y_test)
+    predicted = [None] * len(y_pred)
+    i = 0
+
+    for element in y_test:
+        if element > 0:
+            actual[i] = 1
+        elif element == 0:
+            actual[i] = 0
+        elif element < 0:
+            actual[i] = -1
+        i += 1
+
+    i = 0
+    for element in y_pred:
+        if element > 0:
+            predicted[i] = 1
+        elif element == 0:
+            predicted[i] = 0
+        elif element < 0:
+            predicted[i] = -1
+        i += 1
+
+    cm = confusion_matrix(actual, predicted)
+
+    df_cm = pd.DataFrame(cm, range(2), range(2))
+    sn.set(font_scale=1.5)
+    sn.heatmap(df_cm, annot=True, annot_kws={"size": 20})
     plt.show()
 
 
