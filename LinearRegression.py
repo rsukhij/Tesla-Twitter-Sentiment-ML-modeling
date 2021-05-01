@@ -13,7 +13,7 @@ import seaborn as sn
 # Main function
 def main():
     # Get dataframe from cleaned CSV of data
-    df = pd.read_csv('total_engagement_filtered.csv')
+    df = pd.read_csv('data_with_total_engagement.csv')
     df['Date'] = pd.to_datetime(df.date)
     df['date'] = pd.to_datetime(df.date)
     df['date'] = df['date'].map(dt.datetime.toordinal)
@@ -95,7 +95,7 @@ def main():
     cm = confusion_matrix(actual, predicted)
     print("Accuracy:", accuracy_score(actual, predicted))
 
-    df_cm = pd.DataFrame(cm, range(2), range(2))
+    df_cm = pd.DataFrame(cm, range(3), range(3))
     sn.set(font_scale=1.5)
     sn.heatmap(df_cm, annot=True, annot_kws={"size": 20})
     plt.show()

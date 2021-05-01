@@ -1,12 +1,12 @@
-import pandas as pd
 import numpy as np
-from keras.models import Sequential
-from keras.layers import Dense
-from matplotlib import pyplot as plt
-from sklearn.model_selection import cross_val_score, train_test_split, KFold
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score
-from sklearn.metrics import confusion_matrix
+import pandas as pd
 import seaborn as sn
+from keras.layers import Dense
+from keras.models import Sequential
+from matplotlib import pyplot as plt
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score
+from sklearn.model_selection import train_test_split
 
 
 # Get the baseline model with one neuron for the one input attribute
@@ -45,7 +45,7 @@ estimator.add(Dense(1))
 
 estimator.compile(loss='mean_squared_error', optimizer='adam')
 
-history = estimator.fit(X_train, y_train, epochs=100, batch_size=100)
+history = estimator.fit(X_train, y_train, epochs=100, batch_size=5)
 
 # Test results and metrics
 y_pred = estimator.predict(X_test)
