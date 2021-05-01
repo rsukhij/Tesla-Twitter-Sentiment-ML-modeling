@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import datetime as dt
 from sklearn import metrics
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, accuracy_score
 import seaborn as sn
 
 
@@ -93,6 +93,7 @@ def main():
         i += 1
 
     cm = confusion_matrix(actual, predicted)
+    print("Accuracy:", accuracy_score(actual, predicted))
 
     df_cm = pd.DataFrame(cm, range(2), range(2))
     sn.set(font_scale=1.5)

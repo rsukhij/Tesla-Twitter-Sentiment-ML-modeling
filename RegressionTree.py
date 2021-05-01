@@ -4,7 +4,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, accuracy_score
 import seaborn as sn
 
 # Get dataframe from cleaned CSV of data
@@ -72,6 +72,7 @@ for element in y_pred:
     i += 1
 
 cm = confusion_matrix(actual, predicted)
+print("Accuracy:", accuracy_score(actual, predicted))
 
 df_cm = pd.DataFrame(cm, range(2), range(2))
 sn.set(font_scale=1.5)

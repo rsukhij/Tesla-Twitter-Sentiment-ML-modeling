@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn import metrics
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, accuracy_score
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import seaborn as sn
@@ -79,6 +79,7 @@ for element in y_pred:
     i += 1
 
 cm = confusion_matrix(actual, predicted)
+print("Accuracy:", accuracy_score(actual, predicted))
 
 df_cm = pd.DataFrame(cm, range(2), range(2))
 sn.set(font_scale=1.5)

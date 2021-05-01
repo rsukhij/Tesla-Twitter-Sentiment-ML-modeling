@@ -4,7 +4,7 @@ from keras.models import Sequential
 from keras.layers import Dense
 from matplotlib import pyplot as plt
 from sklearn.model_selection import cross_val_score, train_test_split, KFold
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score
 from sklearn.metrics import confusion_matrix
 import seaborn as sn
 
@@ -45,7 +45,7 @@ estimator.add(Dense(1))
 
 estimator.compile(loss='mean_squared_error', optimizer='adam')
 
-history = estimator.fit(X_train, y_train, epochs=100)
+history = estimator.fit(X_train, y_train, epochs=100, batch_size=100)
 
 # Test results and metrics
 y_pred = estimator.predict(X_test)
@@ -88,6 +88,8 @@ for element in y_pred:
     i += 1
 
 cm = confusion_matrix(actual, predicted)
+
+print("Accuracy:", accuracy_score(actual, predicted))
 
 df_cm = pd.DataFrame(cm, range(2), range(2))
 sn.set(font_scale=1.5)
